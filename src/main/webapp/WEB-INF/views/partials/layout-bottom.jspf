@@ -1,0 +1,31 @@
+        </div>
+        <footer class="mt-auto">
+            <div class="container-fluid py-3 text-center small text-muted">
+                © 2026 Luyện Thi Online
+            </div>
+        </footer>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const sidebar = document.getElementById('sidebar');
+        const btn = document.getElementById('sidebarToggle');
+        if (!sidebar || !btn) return;
+
+        // desktop default: open
+        function applyDefault() {
+            if (window.innerWidth >= 992) sidebar.classList.remove('collapsed');
+            else sidebar.classList.add('collapsed');
+        }
+        applyDefault();
+        window.addEventListener('resize', applyDefault);
+
+        btn.addEventListener('click', function () {
+            sidebar.classList.toggle('collapsed');
+        });
+    })();
+</script>
+</body>
+</html>
+
