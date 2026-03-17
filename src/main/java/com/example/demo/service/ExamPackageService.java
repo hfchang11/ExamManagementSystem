@@ -10,6 +10,8 @@ public interface ExamPackageService {
 
     Page<ExamPackageDto> getActivePackages(Pageable pageable, String q, String sortBy, String direction);
 
+    Page<ExamPackageDto> getPurchasedPackages(UUID studentId, Pageable pageable, String q);
+
     ExamPackageDto getById(UUID id);
 }
 

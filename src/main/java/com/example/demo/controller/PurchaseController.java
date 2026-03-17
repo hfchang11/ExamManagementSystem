@@ -9,6 +9,8 @@
     import org.springframework.web.bind.annotation.PathVariable;
     import org.springframework.web.bind.annotation.RequestParam;
 
+    import org.springframework.beans.factory.annotation.Value;
+
     import java.util.UUID;
 
     @Controller
@@ -16,11 +18,17 @@
 
         private final CheckoutService checkoutService;
         private final DemoStudentService demoStudentService;
+        private final String bankCode;
+        private final String accountNo;
 
         public PurchaseController(CheckoutService checkoutService,
-                                  DemoStudentService demoStudentService) {
+                                  DemoStudentService demoStudentService,
+                                  @Value("${payment.bank-code}") String bankCode,
+                                  @Value("${payment.account-no}") String accountNo) {
             this.checkoutService = checkoutService;
             this.demoStudentService = demoStudentService;
+            this.bankCode = bankCode;
+            this.accountNo = accountNo;
         }
 
         @GetMapping("/purchase/{packageId}")
@@ -31,13 +39,11 @@
             model.addAttribute("examPackage", payment.getPurchase().getExamPackage());
             model.addAttribute("payment", payment);
 
-            // dữ liệu tạo VietQR: stk 855688886666 Techcombank, amount, content = "PAY-" + tx.id
-            String accountNo = "855688886666";
             String amount = payment.getAmount().toPlainString();
             String addInfo = payment.getTransactionId();
 
             // sử dụng API public VietQR (ví dụ dạng link image tạm, trong thực tế cần call REST)
-            String qrUrl = "https://img.vietqr.io/image/techcombank-" + accountNo +
+            String qrUrl = "https://img.vietqr.io/image/" + bankCode + "-" + accountNo +
                     "-compact.png?amount=" + amount + "&addInfo=" + addInfo;
 
             model.addAttribute("vietQrUrl", qrUrl);

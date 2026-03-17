@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.service.DemoStudentService;
+import com.example.demo.service.ExamPackageService;
 import com.example.demo.repository.ExamAttemptRepository;
 import com.example.demo.repository.PackagePurchaseRepository;
 import com.example.demo.repository.PaymentRepository;
-import com.example.demo.entity.PackagePurchase.PurchaseStatus;
 import com.example.demo.entity.Payment.PaymentStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,32 +21,33 @@ public class StudentViewController {
     private final PackagePurchaseRepository packagePurchaseRepository;
     private final PaymentRepository paymentRepository;
     private final ExamAttemptRepository examAttemptRepository;
+    private final ExamPackageService examPackageService;
     private final DemoStudentService demoStudentService;
 
     public StudentViewController(PackagePurchaseRepository packagePurchaseRepository,
                                  PaymentRepository paymentRepository,
                                  ExamAttemptRepository examAttemptRepository,
+                                 ExamPackageService examPackageService,
                                  DemoStudentService demoStudentService) {
         this.packagePurchaseRepository = packagePurchaseRepository;
         this.paymentRepository = paymentRepository;
         this.examAttemptRepository = examAttemptRepository;
+        this.examPackageService = examPackageService;
         this.demoStudentService = demoStudentService;
     }
 
     @GetMapping("/my-packages")
     public String myPackages(@RequestParam(required = false) String q,
-                             @RequestParam(required = false) String status,
                              @RequestParam(defaultValue = "0") int page,
                              @RequestParam(defaultValue = "20") int size,
                              Model model) {
         var studentId = demoStudentService.resolveDemoStudentId();
-        PurchaseStatus st = null;
-        if (status != null && !status.isBlank()) st = PurchaseStatus.valueOf(status);
-        var pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "purchaseDate"));
-        var purchases = packagePurchaseRepository.search(studentId, st, (q == null || q.isBlank()) ? null : q, pageable);
-        model.addAttribute("purchases", purchases);
+        // NOTE: sorting is done inside repository query by PackagePurchase.purchaseDate
+        // (we cannot sort by purchaseDate via Pageable since the query selects ExamPackage).
+        var pageable = PageRequest.of(page, size);
+        var packages = examPackageService.getPurchasedPackages(studentId, pageable, q);
+        model.addAttribute("packages", packages);
         model.addAttribute("q", q);
-        model.addAttribute("status", status);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", size);
         return "student/my-packages";

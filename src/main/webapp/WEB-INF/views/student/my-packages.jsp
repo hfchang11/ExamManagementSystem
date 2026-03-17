@@ -7,52 +7,50 @@
         <h2 class="mb-0">Gói thi đã mua</h2>
         <form class="d-flex gap-2" method="get">
             <input class="form-control form-control-sm" type="text" name="q" value="${q}" placeholder="Tìm theo tên gói"/>
-            <select class="form-select form-select-sm" name="status">
-                <option value="" ${empty status ? 'selected' : ''}>Tất cả</option>
-                <option value="PENDING" ${status == 'PENDING' ? 'selected' : ''}>PENDING</option>
-                <option value="COMPLETED" ${status == 'COMPLETED' ? 'selected' : ''}>COMPLETED</option>
-                <option value="CANCELLED" ${status == 'CANCELLED' ? 'selected' : ''}>CANCELLED</option>
-            </select>
             <button class="btn btn-sm btn-primary" type="submit">Lọc</button>
         </form>
     </div>
 
     <c:choose>
-        <c:when test="${empty purchases.content}">
+        <c:when test="${empty packages.content}">
             <div class="alert alert-info">
                 Bạn chưa mua gói thi nào. Hãy vào marketplace để lựa chọn gói phù hợp.
             </div>
         </c:when>
         <c:otherwise>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Gói thi</th>
-                    <th>Ngày mua</th>
-                    <th>Trạng thái</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="p" items="${purchases.content}">
-                    <tr>
-                        <td>${p.examPackage.name}</td>
-                        <td>${p.purchaseDate}</td>
-                        <td>
-                            <span class="badge ${p.status == 'COMPLETED' ? 'bg-success' : (p.status == 'PENDING' ? 'bg-secondary' : 'bg-danger')}">
-                                ${p.status}
-                            </span>
-                        </td>
-                    </tr>
+            <div class="row g-3">
+                <c:forEach var="pkg" items="${packages.content}">
+                    <div class="col-md-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <h5 class="card-title mb-1">${pkg.name}</h5>
+                                    <span class="badge bg-success">Đã mua</span>
+                                </div>
+                                <p class="card-text text-muted small">${pkg.description}</p>
+                                <p class="mb-1"><strong>Số đề:</strong> ${pkg.numberOfExams}</p>
+                                <p class="mb-1"><strong>Giá:</strong> ${pkg.price} VNĐ</p>
+                                <p class="mb-3"><strong>Rating:</strong>
+                                    <c:out value="${pkg.averageRating != null ? pkg.averageRating : 'Chưa có'}"/>
+                                </p>
+                                <div class="mt-auto d-flex justify-content-between">
+                                    <a href="${pageContext.request.contextPath}/packages/${pkg.id}"
+                                       class="btn btn-outline-primary btn-sm">Xem chi tiết</a>
+                                    <a href="${pageContext.request.contextPath}/purchase/${pkg.id}"
+                                       class="btn btn-primary btn-sm">Mua lại</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </c:forEach>
-                </tbody>
-            </table>
+            </div>
 
             <nav class="mt-3">
                 <ul class="pagination">
-                    <c:forEach begin="0" end="${purchases.totalPages - 1}" var="i">
+                    <c:forEach begin="0" end="${packages.totalPages - 1}" var="i">
                         <li class="page-item ${i == currentPage ? 'active' : ''}">
                             <a class="page-link"
-                               href="?page=${i}&size=${pageSize}&q=${q}&status=${status}">${i + 1}</a>
+                               href="?page=${i}&size=${pageSize}&q=${q}">${i + 1}</a>
                         </li>
                     </c:forEach>
                 </ul>

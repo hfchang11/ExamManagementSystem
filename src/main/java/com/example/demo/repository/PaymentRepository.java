@@ -9,9 +9,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface PaymentRepository extends JpaRepository<Payment, UUID> {
+
+    Optional<Payment> findByTransactionId(String transactionId);
 
     @Query("""
             select p from Payment p

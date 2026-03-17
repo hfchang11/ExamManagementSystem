@@ -6,6 +6,7 @@ import com.example.demo.entity.ExamPackage.PackageStatus;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.ExamPackageMapper;
 import com.example.demo.repository.ExamPackageRepository;
+import com.example.demo.repository.PackagePurchaseRepository;
 import com.example.demo.service.ExamPackageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,9 +23,12 @@ import java.util.UUID;
 public class ExamPackageServiceImpl implements ExamPackageService {
 
     private final ExamPackageRepository examPackageRepository;
+    private final PackagePurchaseRepository packagePurchaseRepository;
 
-    public ExamPackageServiceImpl(ExamPackageRepository examPackageRepository) {
+    public ExamPackageServiceImpl(ExamPackageRepository examPackageRepository,
+                                  PackagePurchaseRepository packagePurchaseRepository) {
         this.examPackageRepository = examPackageRepository;
+        this.packagePurchaseRepository = packagePurchaseRepository;
     }
 
     @Override
@@ -38,7 +42,19 @@ public class ExamPackageServiceImpl implements ExamPackageService {
         String keyword = (q == null || q.isBlank()) ? null : q;
         var pageEntities = examPackageRepository.searchByStatus(PackageStatus.ACTIVE, keyword, sortedPageable);
 
-        // batch enrich numberOfExams & avgRating from real DB tables
+        return enrichAndMap(pageEntities);
+    }
+
+    @Override
+    public Page<ExamPackageDto> getPurchasedPackages(UUID studentId, Pageable pageable, String q) {
+        // NOTE: purchased list may include inactive packages; we show what student owns
+        var pageEntities = examPackageRepository.findPurchasedPackages(studentId,
+                (q == null || q.isBlank()) ? null : q,
+                pageable);
+        return enrichAndMap(pageEntities);
+    }
+
+    private Page<ExamPackageDto> enrichAndMap(Page<ExamPackage> pageEntities) {
         List<UUID> ids = pageEntities.getContent().stream().map(ExamPackage::getId).toList();
         Map<UUID, Integer> examCounts = new HashMap<>();
         Map<UUID, Double> avgRatings = new HashMap<>();
@@ -56,7 +72,6 @@ public class ExamPackageServiceImpl implements ExamPackageService {
                 avgRatings.put(id, avg == null ? null : avg.doubleValue());
             }
         }
-
         return pageEntities.map(e -> {
             ExamPackageDto dto = ExamPackageMapper.toDto(e);
             dto.setNumberOfExams(examCounts.getOrDefault(e.getId(), 0));
