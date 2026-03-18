@@ -39,6 +39,14 @@ public interface ExamPackageRepository extends JpaRepository<ExamPackage, UUID> 
             """, nativeQuery = true)
     List<Map<String, Object>> avgRatingByPackageIds(@Param("packageIds") List<UUID> packageIds);
 
+    @Query(value = """
+            select pr.package_id as packageId, count(*) as reviewCount
+            from package_reviews pr
+            where pr.package_id in (:packageIds)
+            group by pr.package_id
+            """, nativeQuery = true)
+    List<Map<String, Object>> reviewCountByPackageIds(@Param("packageIds") List<UUID> packageIds);
+
     @Query(
             value = """
                     select

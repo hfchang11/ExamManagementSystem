@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,5 +33,28 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
                          @Param("from") LocalDateTime from,
                          @Param("to") LocalDateTime to,
                          Pageable pageable);
+
+    @Query("""
+            select count(p) from Payment p
+            join p.purchase pu
+            where pu.studentId = :studentId
+            """)
+    long countAllByStudent(@Param("studentId") UUID studentId);
+
+    @Query("""
+            select count(p) from Payment p
+            join p.purchase pu
+            where pu.studentId = :studentId
+              and p.paymentStatus = :status
+            """)
+    long countByStudentAndStatus(@Param("studentId") UUID studentId, @Param("status") PaymentStatus status);
+
+    @Query("""
+            select coalesce(sum(p.amount), 0) from Payment p
+            join p.purchase pu
+            where pu.studentId = :studentId
+              and p.paymentStatus = :status
+            """)
+    BigDecimal sumAmountByStudentAndStatus(@Param("studentId") UUID studentId, @Param("status") PaymentStatus status);
 }
 

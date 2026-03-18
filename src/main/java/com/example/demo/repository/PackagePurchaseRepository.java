@@ -23,5 +23,16 @@ public interface PackagePurchaseRepository extends JpaRepository<PackagePurchase
                                 @Param("status") PurchaseStatus status,
                                 @Param("q") String q,
                                 Pageable pageable);
+
+    @Query(value = """
+            select pp.package_id as packageId, count(distinct pp.student_id) as studentCount
+            from package_purchases pp
+            where pp.package_id in (:packageIds)
+              and pp.status = 'COMPLETED'
+            group by pp.package_id
+            """, nativeQuery = true)
+    java.util.List<java.util.Map<String, Object>> studentCountByPackageIds(@Param("packageIds") java.util.List<java.util.UUID> packageIds);
+
+    boolean existsByStudentIdAndExamPackage_IdAndStatus(UUID studentId, UUID packageId, PurchaseStatus status);
 }
 

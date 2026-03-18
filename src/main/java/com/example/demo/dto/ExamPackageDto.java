@@ -11,6 +11,8 @@ public class ExamPackageDto {
     private Integer numberOfExams;
     private BigDecimal price;
     private Double averageRating;
+    private Integer reviewCount;
+    private Integer studentCount;
 
     // getters and setters
 
@@ -60,6 +62,22 @@ public class ExamPackageDto {
 
     public void setAverageRating(Double averageRating) {
         this.averageRating = averageRating;
+    }
+
+    public Integer getReviewCount() {
+        return reviewCount;
+    }
+
+    public void setReviewCount(Integer reviewCount) {
+        this.reviewCount = reviewCount;
+    }
+
+    public Integer getStudentCount() {
+        return studentCount;
+    }
+
+    public void setStudentCount(Integer studentCount) {
+        this.studentCount = studentCount;
     }
 }
 

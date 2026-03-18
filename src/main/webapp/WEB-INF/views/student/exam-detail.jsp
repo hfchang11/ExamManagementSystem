@@ -11,9 +11,4 @@
 <p><strong>Đúng / Sai:</strong> ${result.correctAnswers} / ${result.wrongAnswers}</p>
 <p><strong>Thời gian nộp:</strong> ${result.submittedAt}</p>
 
-<div class="alert alert-info mt-4 mb-0">
-    Database hiện lưu lịch sử làm bài ở bảng <strong>exam_attempts</strong> (không có chi tiết câu hỏi/đáp án),
-    nên trang này hiển thị thông tin attempt.
-</div>
-
 <%@ include file="/WEB-INF/views/partials/layout-bottom.jspf" %>

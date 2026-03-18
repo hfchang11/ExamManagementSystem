@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ExamPackageDto;
+import com.example.demo.repository.ExamRepository;
+import com.example.demo.repository.PackageReviewRepository;
 import com.example.demo.service.ExamPackageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,9 +19,15 @@ import java.util.UUID;
 public class ExamPackageController {
 
     private final ExamPackageService examPackageService;
+    private final ExamRepository examRepository;
+    private final PackageReviewRepository packageReviewRepository;
 
-    public ExamPackageController(ExamPackageService examPackageService) {
+    public ExamPackageController(ExamPackageService examPackageService,
+                                 ExamRepository examRepository,
+                                 PackageReviewRepository packageReviewRepository) {
         this.examPackageService = examPackageService;
+        this.examRepository = examRepository;
+        this.packageReviewRepository = packageReviewRepository;
     }
 
     @GetMapping("/packages")
@@ -44,7 +52,13 @@ public class ExamPackageController {
     @GetMapping("/packages/{id}")
     public String packageDetail(@PathVariable UUID id, Model model) {
         ExamPackageDto examPackage = examPackageService.getById(id);
+        var exams = examRepository.findByPackageId(id);
+        var reviews = packageReviewRepository.findByExamPackage_IdOrderByCreatedAtDesc(id);
+
         model.addAttribute("examPackage", examPackage);
+        model.addAttribute("exams", exams);
+        model.addAttribute("examCount", exams.size());
+        model.addAttribute("reviews", reviews);
         return "packages/detail";
     }
 }

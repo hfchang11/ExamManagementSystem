@@ -18,6 +18,9 @@ public class Exam {
     @Column(name = "exam_title")
     private String title;
 
+    @Column(name = "total_questions")
+    private Integer totalQuestions;
+
     public UUID getId() {
         return id;
     }
@@ -32,6 +35,14 @@ public class Exam {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getTotalQuestions() {
+        return totalQuestions;
+    }
+
+    public void setTotalQuestions(Integer totalQuestions) {
+        this.totalQuestions = totalQuestions;
     }
 }
 

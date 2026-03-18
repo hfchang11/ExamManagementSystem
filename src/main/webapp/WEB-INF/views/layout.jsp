@@ -56,7 +56,6 @@
         <a class="navbar-brand" href="${pageContext.request.contextPath}/packages">Luyện Thi Online</a>
         <div class="ms-auto">
             <span class="navbar-text text-light me-3">Xin chào, Student</span>
-            <a href="#" class="btn btn-outline-light btn-sm">Đăng xuất</a>
         </div>
     </div>
 </header>

@@ -1,3 +1,4 @@
+            </div>
         </div>
         <footer class="mt-auto">
             <div class="container-fluid py-3 text-center small text-muted">
@@ -7,6 +8,7 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     (function () {
         const sidebar = document.getElementById('sidebar');
@@ -15,14 +17,21 @@
 
         // desktop default: open
         function applyDefault() {
-            if (window.innerWidth >= 992) sidebar.classList.remove('collapsed');
-            else sidebar.classList.add('collapsed');
+            const isDesktop = window.innerWidth >= 992;
+            if (isDesktop) {
+                sidebar.classList.remove('collapsed');
+                document.body.classList.remove('sidebar-collapsed');
+            } else {
+                sidebar.classList.add('collapsed');
+                document.body.classList.add('sidebar-collapsed');
+            }
         }
         applyDefault();
         window.addEventListener('resize', applyDefault);
 
         btn.addEventListener('click', function () {
             sidebar.classList.toggle('collapsed');
+            document.body.classList.toggle('sidebar-collapsed', sidebar.classList.contains('collapsed'));
         });
     })();
 </script>
