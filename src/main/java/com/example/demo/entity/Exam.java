@@ -6,7 +6,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.util.UUID;
-
+/*
+ * Cu Thi Huyen Trang
+ */
 @Entity
 @Table(name = "exams")
 public class Exam {

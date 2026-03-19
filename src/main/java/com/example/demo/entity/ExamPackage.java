@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+/*
+ * Cu Thi Huyen Trang
+ */
 @Entity
 @Table(name = "exam_packages")
 public class ExamPackage {

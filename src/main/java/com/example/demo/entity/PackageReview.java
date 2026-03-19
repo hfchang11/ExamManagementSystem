@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+/*
+ * Cu Thi Huyen Trang
+ */
 @Entity
 @Table(name = "package_reviews")
 public class PackageReview {

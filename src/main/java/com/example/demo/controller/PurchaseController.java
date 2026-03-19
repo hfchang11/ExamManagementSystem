@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.UUID;
-
+/*
+ * Cu Thi Huyen Trang
+ */
 @Controller
 public class PurchaseController {
 
@@ -57,7 +59,6 @@ public class PurchaseController {
             String amount = payment.getAmount().toPlainString();
             String addInfo = payment.getTransactionId();
 
-            // sử dụng API public VietQR (ví dụ dạng link image tạm, trong thực tế cần call REST)
             String qrUrl = "https://img.vietqr.io/image/" + bankCode + "-" + accountNo +
                     "-compact.png?amount=" + amount + "&addInfo=" + addInfo;
 

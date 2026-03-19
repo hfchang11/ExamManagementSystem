@@ -9,7 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.UUID;
-
+/*
+ * Cu Thi Huyen Trang
+ */
 public interface PackagePurchaseRepository extends JpaRepository<PackagePurchase, UUID> {
 
     @Query("""

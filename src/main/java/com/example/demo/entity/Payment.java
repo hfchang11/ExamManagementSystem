@@ -6,7 +6,9 @@ import org.hibernate.annotations.UuidGenerator;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+/*
+ * Cu Thi Huyen Trang
+ */
 @Entity
 @Table(name = "payments")
 public class Payment {

@@ -10,7 +10,9 @@ import org.springframework.data.repository.query.Param;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+/*
+ * Cu Thi Huyen Trang
+ */
 public interface ExamAttemptRepository extends JpaRepository<ExamAttempt, UUID> {
 
     @Query("""

@@ -11,7 +11,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
+/*
+ * Cu Thi Huyen Trang
+ */
 public interface ExamPackageRepository extends JpaRepository<ExamPackage, UUID> {
 
     @Query("""

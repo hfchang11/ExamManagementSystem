@@ -5,7 +5,9 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-
+/*
+ * Cu Thi Huyen Trang
+ */
 @Entity
 @Table(name = "package_purchases")
 public class PackagePurchase {
